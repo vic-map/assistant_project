@@ -1,3 +1,4 @@
+
 DEFAULT_ADDRESS_BOOK_PATH = ".address_book.bin"
 
 
