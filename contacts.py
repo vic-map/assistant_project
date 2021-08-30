@@ -3,20 +3,25 @@ from datetime import timedelta
 from datetime import datetime
 import re
 from pathlib import Path
+import os
+import json
+import pickle
 
 
 class Contact():
+    DEFAULT_PATH = "PY\\assistant_project\\contacts\\"
+    last_contact = ''
 
-    DEFAULT_CONTACTS_PATH = '/contacts'
+    def __init__(self, name, address, phones, birthday, email):
 
-    def __init__(self, name):
-
-        self.name = name
         self.address = None
-        self.phones = []
-        self.birthday = None
+
         self.email = []
-        self.sequence_number = 0  # ??????????
+
+    def __getstate__(self):
+        attributes = self.__dict__.copy()
+        attributes['fh'] = None
+        return attributes
 
     @property
     def name(self):
@@ -49,9 +54,18 @@ class Contact():
     def dump_contact(self, name, address, phones, birthday, email):
 
         new_contact = Contact(name, address, phones, birthday, email)
-        path = Path(DEFAULT_CONTACTS_PATH + '/' + name)
-        with open(path, "w") as f:
-            json.dumps(new_contact, f)
+        path = Path('PY\\assistant_project\\contacts\\' + name + '.json')
+        print(path)
+        with open(path, "wb") as fh:
+            pickle.dump(new_contact, fh)
+
+    def get_contact(name):
+        path = Path('PY\\assistant_project\\contacts\\' + name + '.json')
+        with open(path, 'rb') as fh:
+            contact = str(pickle.load(fh))
+        # last_contact = contact['name']
+        print(contact)
+        return contact
 
     def find_b_days():
         interval = int(input('enter en interval: '))
@@ -59,13 +73,9 @@ class Contact():
             current_contact = get_contact(record)
             birthday = current_contact['birthday']
             if interval <= days_to_birthday(birthday):
-                print current_contact
+                print(current_contact)
         message = 'there are no more birthdays'
         return message
-
-    def get_contact(path):
-        contact = json.loads(path)
-        return contact
 
     def phones_checkup(phones):
         for phone_number in phones:
@@ -99,24 +109,24 @@ class Contact():
                 print("Give me name and phone please")
         return inner
 
-    @input_error
-    def hello():
-        message = 'How can I help you?'
-        return message
+    # @input_error
+    def add_contact(arguments):
+        print(arguments)
+        name = arguments.split(sep=', ')[0]
+        address = arguments.split(sep=', ')[1]
+        phones = arguments.split(sep=', ')[2]
+        birthday = arguments.split(sep=', ')[3]
+        email = arguments.split(sep=', ')[4]
+        new_contact = Contact(name, address, phones, birthday, email)
+        # if Contact.phones_checkup(phones) and Contact.email_checkup(email):
+        #     Contact.dump_contact(self, name, address, phones, birthday, email)
+        #     message = 'contact has been added'
+        # else:
+        #     message = 'check oyur input, smth is incorrect'
 
-    @input_error
-    def add_contact():
-        contact = input('enter name,address,phones,birthday,email: ')
-        name = contact.split(sep=',')[1]
-        address = contact.split(sep=',')[2]
-        phones = contact.split(sep=',')[3].split(sep=' ')
-        birthday = contact.split(sep=',')[4]
-        email = contact.split(sep=',')[5].split(sep=' ')
-        if phones_checkup(phones) and email_checkup(email):
-            Contact.dump_contact(self, name, address, phones, birthday, email)
-            message = 'contact has been added'
-        else:
-            message = 'check oyur input, smth is incorrect'
+        new_contact.dump_contact(name, address, phones, birthday, email)
+
+        message = 'contact has been added'
         return message
 
     def days_to_birthday(self, birthday):
@@ -144,9 +154,6 @@ class Contact():
     @input_error
     def change_email():
 
-        # name = input_text.split(sep=' ')[1]
-        # email = input_text.split(sep=' ')[2]
-
         if emails_checkup(emails):
             # address_book[name] = phone
             message = 'email has been changed'
@@ -155,10 +162,10 @@ class Contact():
         return message
 
     @input_error
-    def add_phone():
-
+    def add_phone(name, value):
+        contact = get_contact(name)
         if phones_checkup(phones):
-            # address_book[name] = phone
+            contact.phone.append(value)
             message = 'phone has been added'
         else:
             message = 'check oyur input, smth is incorrect'
@@ -168,46 +175,25 @@ class Contact():
         message = "there isn't such contact"
         for record in DEFAULT_CONTACTS_PATH.iterdir():
             if text == get_contact(record)['name']:
-                print get_contact(record)
+                print(get_contact(record))
                 message = "serch comlited"
         return message
 
-    def change_contact():
+    @input_error
+    def change_contact(name, attribute, value):
+
+        contact = get_contact(name)
+        contact.attribute = value
+        dump_contact(self, name, address, phones, birthday, email)
+        message = 'contact has been chenged'
+        return message
+
+    def deleting_contact(name):
+        os.remove(DEFAULT_CONTACTS_PATH + '/' + name)
         pass
 
-    def deleting_contact():
-        pass
+    def show_all():
 
-    # @input_error
-    # def show_all():
-    #     message = ''
-    #     for name, phone in address_book.items():
-    #         message += name + '  ' + phone + "\n"
-    #     return message.rstrip()
-
-    # def add_phone(self, phone):
-    #     pass
-
-    # def del_phone(self, phone):
-    #     pass
-
-    # def edit_phone(self, phone):
-    #     pass
-
-    # def __iter__():
-    #     return Contact()
-
-    # def __next__(self, quantity):
-
-    #     if self.sequence_number < len(AddressBook.data):
-
-    #         result = []
-
-    #         for i in range(quantity):
-
-    #             result.append(AddressBook.data[sequence_number])
-
-    #             self.sequence_number += 1
-    #         return result
-
-    #     raise StopIteration()
+        for item in DEFAULT_CONTACTS_PATH.iterdir():
+            print(get_contact(item))
+        return message.rstrip()
