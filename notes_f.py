@@ -56,3 +56,30 @@ def find_and_sort_by_tag():
 # print(change_note('1.json'))  # потрібно бути в папці з нотатками
 # add_tag('1.json')  # потрібно бути в папці з нотатками
 # print(find_and_sort_by_tag())
+
+
+# ========= Yura ========
+
+
+def write_notes(note, title, tags):
+    filename = f"{title}.json"
+    result = {'notes': note, 'tags': tags}
+    with open(filename, "w") as fh:
+        json.dump(result, fh)
+        return fh
+#
+
+
+def search_notes(dir: Path, title):
+    for files in dir.iterdir():
+        if files.name == f'{title}.json':
+            return files
+
+
+def remove_note(dir: Path, title):
+    for files in dir.iterdir():
+        if files.name == f'{title}.json':
+            try:
+                files.unlink()
+            except OSError as e:
+                print("Помилка: %s : %s" % (files, e.strerror))

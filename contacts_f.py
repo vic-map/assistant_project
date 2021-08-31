@@ -34,8 +34,8 @@ def add_contact(arguments):
     new_contact['address'] = arguments.split(sep=', ')[1]
     new_contact['phones'] = arguments.split(sep=', ')[2]
     new_contact['birthday'] = arguments.split(sep=', ')[3]
-    new_contact['email'] = arguments.split(sep=', ')[4]
-    # new_contact = {'name', 'address', 'phones', 'birthday', 'email'}
+    new_contact['emails'] = arguments.split(sep=', ')[4]
+
     if phones_checkup(phones) and email_checkup(email):
         dump_contact(new_contact)
         message = 'contact has been added'
@@ -80,12 +80,11 @@ def deleting_contact(name):
     return message
 
 
-def find_b_days():
-    interval = int(input('enter en interval: '))
+def find_b_days(text):
+    interval = int(text)
     for item in default_contact_path.iterdir():
         current_contact = get_contact(item)
-        birthday = current_contact['birthday']
-        if interval <= days_to_birthday(birthday):
+        if interval <= days_to_birthday(current_contact['birthday']):
             print(current_contact)
     message = 'there are no more birthdays'
     return message
@@ -120,47 +119,66 @@ def emails_checkup(email):
         return False
 
 
-# -------------------------------------------------------------------------------------------------
-
-
 @ input_error
 def change_contact(name, attribute, value):
-
     contact = get_contact(name)
-    contact.attribute = value
-    dump_contact(self, name, address, phones, birthday, email)
+    contact[attribute] = value
+    dump_contact(contact)
     message = 'contact has been chenged'
     return message
 
 
 @ input_error
-def add_phones(name, new_value):
+def add_phone(name, new_value):
     if phones_checkup(new_value):
         contact = get_contact(name)
         if new_value in contact['phones']:
             message = f'{new_value} already exists'
         else:
             contact['phones'].append(new_value)
+            dump_contact(contact)
             message = 'phone number has been added'
     return message
 
 
-def set_birthday(ew_value):
+@ input_error
+def add_email(name, new_value):
+    if email_checkup(new_value):
+        contact = get_contact(name)
+        if new_value in contact['emails']:
+            message = f'{new_value} already exists'
+        else:
+            contact['emails'].append(new_value)
+            dump_contact(contact)
+            message = 'email has been added'
+    return message
 
+
+def show_all():
+    for item in default_contact_path.iterdir():
+        print(get_contact(item))
+    message = 'the contact list ended'
+    return message
+
+
+def set_birthday(name, new_value):
     if isinstance(new_value, datetime(year, month, day)):
-        self.birthday = new_value
+        contact = get_contact(name)
+        contact['birthday'] = new_value
+        dump_contact(contact)
+        message = 'birthday have been set'
     else:
-        print(f'{new_value} is not datetime object')
+        message = f'{new_value} is not datetime object'
+    return message
 
 
 @ input_error
-def change_phone():
-
-    # name = input_text.split(sep=' ')[1]
-    # phone = input_text.split(sep=' ')[2]
-
-    if phones_checkup(phones):
-        # address_book[name] = phone
+def change_phone(name, old_value, new_value):
+    if phones_checkup(new_value):
+        contact = get_contact(name)
+        contact['phones'].remove(old_value)
+        contact['phones'].append(new_value)
+        dump_contact(contact)
         message = 'phone has been changed'
     else:
         message = 'check oyur input, smth is incorrect'
@@ -168,18 +186,13 @@ def change_phone():
 
 
 @ input_error
-def change_email():
-
-    if emails_checkup(emails):
-        # address_book[name] = phone
+def change_email(name, old_value, new_value):
+    if emails_checkup(new_value):
+        contact = get_contact(name)
+        contact['emails'].remove(old_value)
+        contact['emails'].append(new_value)
+        dump_contact(contact)
         message = 'email has been changed'
     else:
         message = 'check oyur input, smth is incorrect'
     return message
-
-
-def show_all():
-
-    for item in default_contact_path.iterdir():
-        print(get_contact(item))
-    return message.rstrip()

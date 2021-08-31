@@ -65,7 +65,7 @@ if __name__ == "__main__":
         "find-note": find_note,
         "del-note": delete_note,
         "sort-folder": sort_folder,
-        "good": close_all,
+        "goodbye": close_all,
         "close": close_all,
         "exit": close_all,
         '.': close_all,
@@ -80,5 +80,5 @@ if __name__ == "__main__":
         input_text = input('Input your command: ')
         answer = input_parcer(input_tasks, input_text)
         print(answer)
-        if answer == 'Good bye!':
+        if answer == 'Goodbye!':
             break
