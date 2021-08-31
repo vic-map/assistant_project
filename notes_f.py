@@ -5,7 +5,7 @@ from pathlib import Path
 NOTES = []
 
 
-def write_notes():
+def write_note():
     title = input("File name is: ")
     notes = input("Text: ")
     tags = input("Write tags: ")
@@ -14,14 +14,14 @@ def write_notes():
         json.dump({'notes': notes, 'tags': [tags]}, fh)
 
 
-def find_notes(folder: Path):
+def find_note(folder: Path):
     for item in folder.iterdir():
         if item.is_file():
             NOTES.append(item)
     return NOTES
 
 
-def delete_notes(filename):
+def delete_note(filename):
     file_path = Path(filename)
     try:
         file_path.unlink()
@@ -29,7 +29,7 @@ def delete_notes(filename):
         print("Ошибка: %s : %s" % (file_path, e.strerror))
 
 
-def change_notes(filename):
+def change_note(filename):
     with open(filename, 'r') as f:
         notes = json.load(f)
         notes['notes'] = input()
@@ -37,7 +37,7 @@ def change_notes(filename):
         json.dump(notes, fh)
 
 
-def add_tags(filename):
+def add_tag(filename):
     with open(filename, 'r') as f:
         tags = json.load(f)
         result = tags['tags']
@@ -46,13 +46,13 @@ def add_tags(filename):
         json.dump(tags, fh)
 
 
-def find_and_sort_by_tags():
+def find_and_sort_by_tag():
     pass
 
 
-# write_notes()  # потрібно бути в папці з нотатками
-# find_notes(Path('notes\\')) # потрібно бути на рівень вище ніж папка з нотатками
+# write_note()  # потрібно бути в папці з нотатками
+# find_note(Path('notes\\')) # потрібно бути на рівень вище ніж папка з нотатками
 # delete_notes("Тут має бути назва файлу") # потрібно бути в папці з нотатками
-# print(change_notes('1.json'))  # потрібно бути в папці з нотатками
-# add_tags('1.json')  # потрібно бути в папці з нотатками
-# print(find_and_sort_by_tags())
+# print(change_note('1.json'))  # потрібно бути в папці з нотатками
+# add_tag('1.json')  # потрібно бути в папці з нотатками
+# print(find_and_sort_by_tag())

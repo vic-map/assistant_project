@@ -1,4 +1,6 @@
 import contacts_f
+import notes_f
+import files_f
 
 
 def input_error(func):
@@ -56,6 +58,13 @@ if __name__ == "__main__":
         "find-contact": find_contact,
         "change-contact": change_contact,
         "del-contact": deleting_contact,
+        "write-note": write_note,
+        "change-note": change_note,
+        "add-tag": add_tag,
+        "find_note_by_tag": find_and_sort_by_tag,
+        "find-note": find_note,
+        "del-note": delete_note,
+        "sort-folder": sort_folder,
         "good": close_all,
         "close": close_all,
         "exit": close_all,
