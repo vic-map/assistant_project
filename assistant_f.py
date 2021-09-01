@@ -2,26 +2,58 @@ import contacts_f
 import notes_f
 import files_f
 
-
-def input_error(func):
-    def inner(input_text):
-        try:
-            result = func()
-            return result
-        except KeyError:
-            print('Enter correct user name')
-        except TypeError:
-            print('Enter correct command')
-        except ValueError:
-            print("Give me name and phone please")
-        except IndexError:
-            print("Give me name and phone please")
-    return inner
+# default_contact_path = "contacts/"
+default_notes_path = "notes/"
+message = "operation failed"
 
 
-@input_error
-def input_parcer(input_tasks, text):
+# def input_error(func):
+#     def inner(input_text):
+#         try:
+#             result = func()
+#             return result
+#         except KeyError:
+#             print('Enter correct user name')
+#         except TypeError:
+#             print('Enter correct command')
+#         except ValueError:
+#             print("Give me name and phone please")
+#         except IndexError:
+#             print("Give me name and phone please")
+#     return inner
 
+
+# @input_error
+def input_parcer(text):
+
+    input_tasks = {
+        'hello': hello,
+        'hi': hello,
+        'add-contact': contacts_f.add_contact,
+        "find-contact": contacts_f.find_contact,
+        'get-contact': contacts_f.get_contact,
+        "change-pnone": contacts_f.change_phone,
+        "add-phone": contacts_f.add_phone,
+        "show-all-contacts": contacts_f.show_all,
+        "show-bdays": contacts_f.find_b_days,
+        "change-contact": contacts_f.change_contact,
+        "del-contact": contacts_f.deleting_contact,
+        # "write-note": write_note,
+        # "change-note": change_note,
+        # "edit-note": edit_note,
+        # "add-note-tag": add_tag,
+        # "find_tag": find_tag,
+        # "find-note": find_note,
+        # "read-note": read_note,
+        # "del-note": remove_note,
+        # "del-tag": remove_tag,
+        # "sort-folder": files_f.scan,  # ???????????
+        # "goodbye": close_all,
+        # "close": close_all,
+        # "exit": close_all,
+        # '.': close_all,
+        # 'help': helptext,
+    }
     task = input_text.rsplit(sep=': ')[0].lower()
 
     if len(input_text.rsplit(sep=': ')) > 1:
@@ -46,39 +78,13 @@ def close_all():
 
 if __name__ == "__main__":
 
-    input_tasks = {
-        'hello': hello,
-        'hi': hello,
-        'add-contact': add_contact,
-        'get-contact': get_contact,
-        "change-pnone": change_phone,
-        "add-phone": add_phone,
-        "show-all-contacts": show_all,
-        "show-bdays": find_b_days,
-        "find-contact": find_contact,
-        "change-contact": change_contact,
-        "del-contact": deleting_contact,
-        "write-note": write_note,
-        "change-note": change_note,
-        "add-tag": add_tag,
-        "find_note_by_tag": find_and_sort_by_tag,
-        "find-note": find_note,
-        "del-note": delete_note,
-        "sort-folder": sort_folder,
-        "goodbye": close_all,
-        "close": close_all,
-        "exit": close_all,
-        '.': close_all,
-        'help': helptext,
-    }
-
-    welcome_text = f"---\nHello. I'm CLI bot.\nThe commands are:\n{input_tasks.keys()}\n---"
+    welcome_text = f"---\nHello. I'm CLI bot.\nThe commands are:\n\n---"
 
     print(welcome_text)
 
     while True:
         input_text = input('Input your command: ')
-        answer = input_parcer(input_tasks, input_text)
+        answer = input_parcer(input_text)
         print(answer)
         if answer == 'Goodbye!':
             break

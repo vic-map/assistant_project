@@ -7,9 +7,8 @@ import os
 import json
 import pickle
 
-
-default_contact_path = "PY\\assistant_project\\contacts\\"
-# last_contact = ''
+default_contact_path = "contacts/"
+message = "operation failed"
 
 
 def input_error(func):
@@ -28,27 +27,28 @@ def input_error(func):
     return inner
 
 
+# @ input_error
 def add_contact(arguments):
-    new_contact = {}
-    new_contact['name'] = arguments.split(sep=', ')[0]
-    new_contact['address'] = arguments.split(sep=', ')[1]
-    new_contact['phones'] = arguments.split(sep=', ')[2]
-    new_contact['birthday'] = arguments.split(sep=', ')[3]
-    new_contact['emails'] = arguments.split(sep=', ')[4]
-
-    if phones_checkup(phones) and email_checkup(email):
-        dump_contact(new_contact)
-        message = 'contact has been added'
+    print('in add_contact')
+    contact = {}
+    contact['name'] = arguments.split(sep=', ')[0]
+    contact['phones'] = arguments.split(sep=', ')[1]
+    contact['address'] = arguments.split(sep=', ')[2]
+    contact['birthday'] = arguments.split(sep=', ')[3]
+    contact['emails'] = arguments.split(sep=', ')[4]
+    if phones_checkup(contact['phones']) and email_checkup(email):
+        message = dump_contact(contact)
     else:
         message = 'check oyur input, smth is incorrect'
     return message
 
 
 def find_contact(text):
-    message = "there isn't such contact"
-    for record in default_contact_path.iterdir():
-        if text == get_contact(record)['name']:
-            print(get_contact(record))
+    message = f'contact {text} not found'
+    for item in Path(default_contact_path).iterdir():
+        title = item.name.split(sep='.')[0]
+        if text == title:
+            print(get_contact(title))
             message = "serch comlited"
     return message
 
@@ -56,19 +56,17 @@ def find_contact(text):
 def dump_contact(contact):
 
     path = default_contact_path + contact['name'] + '.json'
-    # print(path)
+
     with open(path, "w") as fh:
         json.dump(contact, fh)
-    message = 'contact has been written'
+    message = f"contact {contact['name']} has been written"
     return message
 
 
 def get_contact(name):
-    path = default_contact_path + contact['name'] + '.json'
+    path = Path(default_contact_path + name + '.json')
     with open(path, 'r') as fh:
         contact = json.load(fh)
-    # last_contact = contact['name']
-    # print(contact)
     return contact
 
 
@@ -82,8 +80,8 @@ def deleting_contact(name):
 
 def find_b_days(text):
     interval = int(text)
-    for item in default_contact_path.iterdir():
-        current_contact = get_contact(item)
+    for item in Path(default_contact_path).iterdir():
+        current_contact = get_contact(item.name.split(sep='.')[0])
         if interval <= days_to_birthday(current_contact['birthday']):
             print(current_contact)
     message = 'there are no more birthdays'
@@ -101,6 +99,7 @@ def days_to_birthday(birthday):
 
 
 def phones_checkup(phones):
+    print('in phones_checkup')
     for phone_number in phones:
         checkup = re.findall(
             r"\+380\(\d{2}\)\d{3}\-\d{2}\-\d{2}|\+380\(\d{2}\)\d{3}\-\d{1}\-\d{3}", phone_number)
@@ -111,6 +110,7 @@ def phones_checkup(phones):
 
 
 def emails_checkup(email):
+    print('in emails_checkup')
     checkup = re.findall(
         r'[a-zA-Z]+[a-zA-Z0-9_.]+@{1}[a-z]+\.[a-z]{2,}', text)
     if checkup:
@@ -196,3 +196,7 @@ def change_email(name, old_value, new_value):
     else:
         message = 'check oyur input, smth is incorrect'
     return message
+
+
+if __name__ == "__main__":
+    print('00000000000')

@@ -138,22 +138,22 @@ for f in FOLDERS:
     handle_folder(f)
 
 
-if __name__ == "__main__":
-    scan_path = sys.argv[1]
-    print(f"Start in folder: {scan_path}")
+# if __name__ == "__main__":
+#     scan_path = sys.argv[1]
+#     print(f"Start in folder: {scan_path}")
 
-search_folder = Path(scan_path)
-scan(search_folder)
-print(f"Images: {IMAGES}")
-print(f"Videos: {VIDEOS}")
-print(f"Documents: {DOCUMENTS}")
-print(f"Audios: {MUSIC}")
-print(f"Archives: {ARCH}")
-print(f"Unknown files: {OTHER}")
-print(f"There are file of types: {EXTENSION}")
-print(f"Unknown types of file: {UNKNOWN}")
+# search_folder = Path(scan_path)
+# scan(search_folder)
+# print(f"Images: {IMAGES}")
+# print(f"Videos: {VIDEOS}")
+# print(f"Documents: {DOCUMENTS}")
+# print(f"Audios: {MUSIC}")
+# print(f"Archives: {ARCH}")
+# print(f"Unknown files: {OTHER}")
+# print(f"There are file of types: {EXTENSION}")
+# print(f"Unknown types of file: {UNKNOWN}")
 
-sort_folder = Path(scan_path)
-print(f"sort folder is: {sort_folder}")
-print(sort_folder.resolve())
-main(sort_folder.resolve())
+# sort_folder = Path(scan_path)
+# print(f"sort folder is: {sort_folder}")
+# print(sort_folder.resolve())
+# main(sort_folder.resolve())
