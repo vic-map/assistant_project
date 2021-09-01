@@ -1,22 +1,17 @@
 import json
 from pathlib import Path
+from sys import platform
+import os
 
 
-default_notes_path = '\\notes\\'
+default_note_path = "PY/assistant_project/notes/"
+message = "operation failed"
 
 
-# write_note()  # потрібно бути в папці з нотатками
-# find_note(Path('notes\\')) # потрібно бути на рівень вище ніж папка з нотатками
-# delete_notes("Тут має бути назва файлу") # потрібно бути в папці з нотатками
-# print(change_note('1.json'))  # потрібно бути в папці з нотатками
-# add_tag('1.json')  # потрібно бути в папці з нотатками
-# print(find_and_sort_by_tag())
-
-
-# ========= Yura ========
-
-
-def write_note(title, tags, text):
+def write_note(arguments):
+    title = arguments.split(sep=', ')[0]
+    tags = arguments.split(sep=', ')[1].split(sep='; ')
+    text = arguments.split(sep=', ')[2]
     note = {'name': title, 'tags': tags, 'text': text}
     message = dump_note(note)
     return message
@@ -47,13 +42,16 @@ def get_note(title):
 
 def find_note(title):
     filename = title + '.json'
-    for item in default_notes_path.iterdir():
-        if item == filename:
+    message = 'there is no such note'
+    for item in Path(default_note_path).iterdir():
+        if item.name == filename:
             message = get_note(title)
     return message
 
 
-def change_note(title, text):
+def change_note(arguments):
+    title = arguments.split(sep=', ')[0]
+    text = arguments.split(sep=', ')[1]
     note = get_note(title)
     note['text'] = text
     dump_note(note)
@@ -61,19 +59,17 @@ def change_note(title, text):
     return message
 
 
-def edit_note(title):
-    pass
-
-
 def remove_note(title):
-    path = default_note_path + title + '.json'
+    path = Path(default_note_path + title + '.json')
     path.unlink()
     message = f'the note {title} has been removed'
     return message
 #
 
 
-def add_tag(title, tag):
+def add_tag(arguments):
+    title = arguments.split(sep=', ')[0]
+    tag = arguments.split(sep=', ')[1]
     note = get_note(title)
     if tag in note['tags']:
         message = f'there is such tag in the note {title}'
@@ -84,7 +80,9 @@ def add_tag(title, tag):
     return message
 
 
-def remove_tag(title, tag):
+def remove_tag(arguments):
+    title = arguments.split(sep=', ')[0]
+    tag = arguments.split(sep=', ')[1]
     note = get_note(title)
     if tag in note['tags']:
         note['tags'].remove(tag)
@@ -97,9 +95,9 @@ def remove_tag(title, tag):
 
 def find_tag(tag):
     note_list = []
-    for item in default_notes_path.iterdir():
-        note = get_note(item.pref())
+    for item in Path(default_note_path).iterdir():
+        note = get_note(item.name.split(sep='.')[0])
         if tag in note['tags']:
             note_list.append(note['name'])
-            message = f"the {tag} is in notes:\n {note_list.sort()}"
+            message = f"the {tag} is in notes:\n {note_list}"
     return message

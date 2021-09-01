@@ -31,33 +31,37 @@ def input_parcer(text):
         'hi': hello,
         'add-contact': contacts_f.add_contact,
         "find-contact": contacts_f.find_contact,
-        'get-contact': contacts_f.get_contact,
-        "change-pnone": contacts_f.change_phone,
-        "add-phone": contacts_f.add_phone,
+        "del-contact": contacts_f.deleting_contact,
         "show-all-contacts": contacts_f.show_all,
         "show-bdays": contacts_f.find_b_days,
-        "change-contact": contacts_f.change_contact,
-        "del-contact": contacts_f.deleting_contact,
-        # "write-note": write_note,
-        # "change-note": change_note,
-        # "edit-note": edit_note,
-        # "add-note-tag": add_tag,
-        # "find_tag": find_tag,
-        # "find-note": find_note,
-        # "read-note": read_note,
-        # "del-note": remove_note,
-        # "del-tag": remove_tag,
-        # "sort-folder": files_f.scan,  # ???????????
-        # "goodbye": close_all,
-        # "close": close_all,
-        # "exit": close_all,
-        # '.': close_all,
-        # 'help': helptext,
+        "change-name": contacts_f.change_name,
+        "add-phone": contacts_f.add_phone,
+        "add-email": contacts_f.add_email,
+        # "del-pnone": contacts_f.remove_phone,
+        # "del-email": contacts_f.remove_email,
+        "set-address": contacts_f.set_address,
+        "set-bday": contacts_f.set_b_day,
+        "write-note": notes_f.write_note,
+        "change-note": notes_f.change_note,
+        # "edit-note": notes_f.edit_note,
+        "add-note-tag": notes_f.add_tag,
+        "find-tag": notes_f.find_tag,
+        "find-note": notes_f.find_note,
+        # "read-note": notes_f.read_note,
+        "del-note": notes_f.remove_note,
+        "del-tag": notes_f.remove_tag,
+        "sort-folder": files_f.scan,  # ???????????
+        'goodbye': close_all,
+        "close": close_all,
+        "exit": close_all,
+        '.': close_all,
+        'help': helptext
     }
-    task = input_text.rsplit(sep=': ')[0].lower()
 
-    if len(input_text.rsplit(sep=': ')) > 1:
-        arguments = input_text.lower().rsplit(sep=': ')[1]
+    task = input_text.split(sep=': ')[0].lower()
+
+    if len(input_text.split(sep=': ')) > 1:
+        arguments = input_text.lower().split(sep=': ')[1]
         return input_tasks.get(task)(arguments)
     return input_tasks.get(task)()
 
@@ -72,7 +76,7 @@ def helptext():
 
 
 def close_all():
-    message = 'Good bye!'
+    message = 'Goodbye!'
     return message
 
 
